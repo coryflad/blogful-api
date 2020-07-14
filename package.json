@@ -7,6 +7,7 @@
     "test": "mocha --require test/setup",
     "dev": "nodemon src/server",
     "migrate": "postgrator --config postgrator-config.js",
+    "migrate:test": "env NODE_ENV=test npm run migrate",
     "start": "node src/server",
     "predeploy": "npm audit",
     "deploy": "git push heroku master"

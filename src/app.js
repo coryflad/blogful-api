@@ -8,11 +8,7 @@ const ArticlesService = require('./articles-service')
 
 const app = express()
 
-const morganOption = (NODE_ENV === 'production')
-    ? 'tiny'
-    : 'common';
-
-app.use(morgan(morganOption))
+app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common'))
 app.use(helmet())
 app.use(cors())
 
@@ -25,9 +21,9 @@ app.get('/articles', (req, res, next) => {
         .catch(next)
 })
 
-app.post('./articles', (req, res, next) => {
+app.post('/articles', (req, res, next) => {
     res.status(201).send('stuff')
-})
+  })
 
 app.get('/articles/:article_id', (req, res, next) => {
     const knexInstance = req.app.get('db')
@@ -50,7 +46,7 @@ app.get('/', (req, res) => {
 app.use(function errorHandler(error, req, res, next) {
     let response
     if (NODE_ENV === 'production') {
-        response = { error: { message: 'server error' } }
+        response = { error: 'server error' }
     } else {
         console.error(error)
         response = { message: errror.message, error }

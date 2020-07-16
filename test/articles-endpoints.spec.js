@@ -52,8 +52,8 @@ describe.only('Articles Endpoints', function () {
             it(`responds with 404`, () => {
                 const articleId = 123456
                 return supertest(app)
-                .get(`/articles/${articleId}`)
-                .expect(404, { error: { message: `Article doesn't exist`} })
+                    .get(`/articles/${articleId}`)
+                    .expect(404, { error: { message: `Article doesn't exist` } })
             })
         })
 
@@ -73,6 +73,18 @@ describe.only('Articles Endpoints', function () {
                     .get(`/articles/${articleId}`)
                     .expect(200, expectedArticle)
             })
+        })
+    })
+    describe.only(`POST /articles`, () => {
+        it(`creates an article, responding with 201 and the new article`, function () {
+            return supertest(app)
+                .post('./articles')
+                .send({
+                    title: 'Test new article',
+                    style: 'Listicle',
+                    content: 'Test new article content...'
+                })
+                .expect(201)
         })
     })
 })

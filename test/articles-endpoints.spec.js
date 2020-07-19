@@ -4,6 +4,7 @@ const { makeArticlesArray } = require('./articles.fixtures')
 const { expect } = require('chai')
 const supertest = require('supertest')
 
+
 describe('Articles Endpoints', function () {
     let db
 
@@ -75,7 +76,7 @@ describe('Articles Endpoints', function () {
             })
         })
     })
-    describe(`POST /articles`, () => {
+    describe.only(`POST /articles`, () => {
         it(`creates an article, responding with 201 and the new article`, function () {
             this.retries(3)
             const newArticle = {
@@ -102,6 +103,25 @@ describe('Articles Endpoints', function () {
                         .get(`/articles/${postRes.body.id}`)
                         .expect(postRes.body)
                 )
+        })
+        const requiredFields = ['title', 'style', 'content']
+
+        requiredFields.forEach(field => {
+            const newArticle = {
+                title: 'Test new article',
+                style: 'Listicle',
+                content: 'Test new article content...'
+            }
+            it(`responds with 400 and an erro message when the '${field}' is missing`, () => {
+                delete newArticle[field]
+
+                return supertest(app)
+                    .post('/articles')
+                    .send(newArticle)
+                    .expect(400, {
+                        error: { message: `Missing '${field}' in request body` }
+                    })
+            })
         })
     })
 })

@@ -48,7 +48,7 @@ describe('Articles Endpoints', function () {
         })
     })
 
-    describe.only(`GET /articles/:article_id`, () => {
+    describe(`GET /articles/:article_id`, () => {
         context(`Given no articles`, () => {
             it(`responds with 404`, () => {
                 const articleId = 123456
@@ -136,7 +136,7 @@ describe('Articles Endpoints', function () {
                 style: 'Listicle',
                 content: 'Test new article content...'
             }
-            it(`responds with 400 and an erro message when the '${field}' is missing`, () => {
+            it(`responds with 400 and an error message when the '${field}' is missing`, () => {
                 delete newArticle[field]
 
                 return supertest(app)

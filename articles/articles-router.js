@@ -1,18 +1,25 @@
 const express = require('express')
 const xss = require('xss')
-const ArticlesService = require('../src/articles-service')
+const ArticlesService = require('./articles-service')
 
 const articlesRouter = express.Router()
 const jsonParser = express.json()
 
+const serialzeArticle = article => ({
+    id: article.id,
+    style: article.style,
+    title: xss(article.title),
+    content: xss(article.content),
+    date_published: article.date_published,
+})
+
 articlesRouter
     .route('/')
     .get((req, res, next) => {
-        ArticlesService.getAllArticles(
-            req.app.get('db')
-        )
+        const knexInstance = req.app.get('db')
+        ArticlesService.getAllArticles(knexInstance)
             .then(articles => {
-                res.json(articles)
+                res.json(articles.map(serialzeArticle))
             })
             .catch(next)
     })

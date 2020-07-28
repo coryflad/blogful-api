@@ -1,8 +1,8 @@
 const knex = require('knex')
 const app = require('../src/app')
 const { makeArticlesArray, makeMaliciousArticle } = require('./articles.fixtures')
-const supertest = require('supertest')
-const { contentSecurityPolicy } = require('helmet')
+
+
 
 describe('Articles Endpoints', function () {
     let db

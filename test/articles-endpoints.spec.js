@@ -166,17 +166,17 @@ describe('Articles Endpoints', function () {
             })
         })
 
-        // it('removes XSS attack content from response', () => {
-        //     const { maliciousArticle, expectedArticle } = makeMaliciousArticle()
-        //     return supertest(app)
-        //         .post(`/articles`)
-        //         .send(maliciousArticle)
-        //         .expect(201)
-        //         .expect(res => {
-        //             expect(res.body.title).to.eql(expectedArticle.title)
-        //             expect(res.body.content).to.eql(expectedArticle.content)
-        //         })
-        // })
+        it('removes XSS attack content from response', () => {
+            const { maliciousArticle, expectedArticle } = makeMaliciousArticle()
+            return supertest(app)
+                .post(`/articles`)
+                .send(maliciousArticle)
+                .expect(201)
+                .expect(res => {
+                    expect(res.body.title).to.eql(expectedArticle.title)
+                    expect(res.body.content).to.eql(expectedArticle.content)
+                })
+        })
     })
     describe(`DELETE /aritcles/:article_id`, () => {
         context(`Given no articles`, () => {

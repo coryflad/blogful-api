@@ -5,7 +5,7 @@ const ArticlesService = require('./articles-service')
 const articlesRouter = express.Router()
 const jsonParser = express.json()
 
-const serialzeArticle = article => ({
+const serializeArticle = article => ({
     id: article.id,
     style: article.style,
     title: xss(article.title),
@@ -19,7 +19,7 @@ articlesRouter
         const knexInstance = req.app.get('db')
         ArticlesService.getAllArticles(knexInstance)
             .then(articles => {
-                res.json(articles.map(serialzeArticle))
+                res.json(articles.map(serializeArticle))
             })
             .catch(next)
     })
@@ -61,26 +61,20 @@ articlesRouter
                         error: { message: `Article doesn't exist` }
                     })
                 }
-                res.article = article // save the article for the next middleware
-                next() // don't forget to call the nex so the next middleware happens!
+                res.article = article
+                next()
             })
             .catch(next)
     })
     .get((req, res, next) => {
-        res.json({
-            id: res.article.id,
-            style: res.article.style,
-            title: xss(res.article.title), //sanitize title
-            content: xss(res.article.content), // sanitize content
-            date_published: res.article.date_published
-        })
+        res.json(serializeArticle(res.article))
     })
     .delete((req, res, next) => {
         ArticlesService.deleteArticle(
             req.app.get('db'),
             req.params.article_id
         )
-            .then(() => {
+            .then(numRowsAffected => {
                 res.status(204).end()
             })
             .catch(next)
